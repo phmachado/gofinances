@@ -15,7 +15,7 @@ type Category = {
   icon: string;
 };
 
-type Data = {
+export type TransactionCardProps = {
   type: "positive" | "negative";
   title: string;
   amount: string;
@@ -23,7 +23,7 @@ type Data = {
   date: string;
 };
 
-type Props = { data: Data };
+type Props = { data: TransactionCardProps };
 
 export default function TransactionCard({ data }: Props) {
   return (
