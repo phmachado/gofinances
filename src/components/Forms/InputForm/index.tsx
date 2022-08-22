@@ -1,16 +1,27 @@
 import React from "react";
-import { Control, Controller } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  DeepRequired,
+  FieldError,
+  FieldErrorsImpl,
+  Merge,
+} from "react-hook-form";
 import { TextInputProps } from "react-native";
 
 import Input from "../Input";
-import { Container } from "./styles";
+import { Container, Error } from "./styles";
 
 interface Props extends TextInputProps {
   control: Control;
   name: string;
+  error?:
+    | string
+    | FieldError
+    | Merge<FieldError, FieldErrorsImpl<DeepRequired<any>>>;
 }
 
-export default function InputForm({ control, name, ...rest }: Props) {
+export default function InputForm({ control, name, error, ...rest }: Props) {
   return (
     <Container>
       <Controller
@@ -20,6 +31,7 @@ export default function InputForm({ control, name, ...rest }: Props) {
         )}
         name={name}
       />
+      {error && <Error>{error}</Error>}
     </Container>
   );
 }
