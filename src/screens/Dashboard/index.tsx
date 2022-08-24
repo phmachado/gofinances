@@ -37,6 +37,10 @@ type HighlightData = {
   entries: HighlightProps;
   expenses: HighlightProps;
   total: HighlightProps;
+  lastEntry: string;
+  lastExpense: string;
+  lastTransaction: string;
+  firstTransaction: string;
 };
 
 export default function Dashboard() {
@@ -48,10 +52,37 @@ export default function Dashboard() {
 
   const theme = useTheme();
 
+  function formatDate(date: string) {
+    return Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+    }).format(new Date(date));
+  }
+
   async function loadTransactions() {
     const dataKey = "@gofinances:transactions";
     const response = await AsyncStorage.getItem(dataKey);
     const transactions = response ? JSON.parse(response) : [];
+
+    const sortedEntries = transactions
+      .filter((item: DataListProps) => item.type === "positive")
+      .map((item: DataListProps) => new Date(item.date).getTime())
+      .sort((a: number, b: number) => a - b);
+
+    const sortedExpenses = transactions
+      .filter((item: DataListProps) => item.type === "negative")
+      .map((item: DataListProps) => new Date(item.date).getTime())
+      .sort((a: number, b: number) => a - b);
+
+    const sortedTransactions = transactions
+      .map((item: DataListProps) => new Date(item.date).getTime())
+      .sort((a: number, b: number) => a - b);
+
+    const lastEntry = formatDate(sortedEntries.slice(-1)[0]);
+    const lastExpense = formatDate(sortedExpenses.slice(-1)[0]);
+    const lastTransaction = formatDate(sortedTransactions.slice(-1)[0]);
+    const firstTransaction = formatDate(sortedTransactions[0]);
 
     let entriesTotal = 0;
     let expensesTotal = 0;
@@ -69,11 +100,7 @@ export default function Dashboard() {
           currency: "BRL",
         });
 
-        const date = Intl.DateTimeFormat("pt-BR", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "2-digit",
-        }).format(new Date(item.date));
+        const date = formatDate(item.date);
 
         return {
           id: item.id,
@@ -106,6 +133,10 @@ export default function Dashboard() {
           currency: "BRL",
         }),
       },
+      lastEntry,
+      lastExpense,
+      lastTransaction,
+      firstTransaction,
     });
 
     setIsLoading(false);
@@ -150,19 +181,19 @@ export default function Dashboard() {
               type="up"
               title="Entrada"
               amount={highlightData.entries.amount}
-              lastTransaction="Última entrada dia 13 de Abril"
+              lastTransaction={`Última entrada em ${highlightData.lastEntry}`}
             />
             <HighlightCard
               type="down"
               title="Saídas"
               amount={highlightData.expenses.amount}
-              lastTransaction="Última saída dia 03 de Abril"
+              lastTransaction={`Última saída em ${highlightData.lastExpense}`}
             />
             <HighlightCard
               type="total"
               title="Total"
               amount={highlightData.total.amount}
-              lastTransaction="01 à 16 de Abril"
+              lastTransaction={`${highlightData.firstTransaction} à ${highlightData.lastTransaction}`}
             />
           </HighlightCards>
           <Transactions>
