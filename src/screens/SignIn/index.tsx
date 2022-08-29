@@ -11,12 +11,15 @@ import {
   FooterWrapper,
 } from "./styles";
 import SignInSocialButton from "../../components/SignInSocialButton";
+import { useAuth } from "../../hooks/auth";
 
 import AppleSvg from "../../assets/apple.svg";
 import GoogleSvg from "../../assets/google.svg";
 import LogoSvg from "../../assets/logo.svg";
 
 export default function SignIn() {
+  const { user } = useAuth();
+
   return (
     <Container>
       <Header>
