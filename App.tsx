@@ -1,5 +1,6 @@
 import "intl";
 import "intl/locale-data/jsonp/pt-BR";
+import "react-native-gesture-handler";
 
 import React, { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
@@ -10,12 +11,10 @@ import {
   Poppins_500Medium,
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins";
-import { NavigationContainer } from "@react-navigation/native";
 
-import AppRoutes from "./src/routes/app.routes";
+import Routes from "./src/routes";
 import theme from "./src/global/styles/theme";
 import { StatusBar } from "react-native";
-import SignIn from "./src/screens/SignIn";
 import { AuthProvider } from "./src/hooks/auth";
 
 export default function App() {
@@ -45,12 +44,10 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <StatusBar barStyle="light-content" />
-        <AuthProvider>
-          <SignIn />
-        </AuthProvider>
-      </NavigationContainer>
+      <StatusBar barStyle="light-content" />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </ThemeProvider>
   );
 }

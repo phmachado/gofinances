@@ -37,10 +37,10 @@ type HighlightData = {
   entries: HighlightProps;
   expenses: HighlightProps;
   total: HighlightProps;
-  lastEntry: string;
-  lastExpense: string;
-  lastTransaction: string;
-  firstTransaction: string;
+  lastEntry: string | undefined;
+  lastExpense: string | undefined;
+  lastTransaction: string | undefined;
+  firstTransaction: string | undefined;
 };
 
 export default function Dashboard() {
@@ -52,7 +52,8 @@ export default function Dashboard() {
 
   const theme = useTheme();
 
-  function formatDate(date: string) {
+  function formatDate(date: string | number) {
+    if (!date) return;
     return Intl.DateTimeFormat("pt-BR", {
       day: "2-digit",
       month: "2-digit",
@@ -133,10 +134,10 @@ export default function Dashboard() {
           currency: "BRL",
         }),
       },
-      lastEntry,
-      lastExpense,
-      lastTransaction,
-      firstTransaction,
+      lastEntry: lastEntry || formatDate(new Date().getTime()),
+      lastExpense: lastExpense || formatDate(new Date().getTime()),
+      lastTransaction: lastTransaction || formatDate(new Date().getTime()),
+      firstTransaction: firstTransaction || formatDate(new Date().getTime()),
     });
 
     setIsLoading(false);
