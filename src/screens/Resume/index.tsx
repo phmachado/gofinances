@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import HistoryCard from "../../components/HistoryCard";
 import { Container, Header, Title, Content } from "./styles";
 import { DataListProps } from "../Dashboard";
 import { categories } from "../../utils/categories";
+import { useFocusEffect } from "@react-navigation/native";
 
 type CategoryData = {
   name: string;
@@ -55,6 +56,12 @@ export default function Resume() {
   useEffect(() => {
     loadData();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [])
+  );
 
   return (
     <Container>

@@ -19,11 +19,13 @@ import {
   Title,
   TransactionsList,
   LoadContainer,
+  LogoutButton,
 } from "./styles";
 import HighlightCard from "../../components/HighlightCard";
 import TransactionCard, {
   TransactionCardProps,
 } from "../../components/TransactionCard";
+import { useAuth } from "../../hooks/auth";
 
 export interface DataListProps extends TransactionCardProps {
   id: string;
@@ -51,6 +53,7 @@ export default function Dashboard() {
   );
 
   const theme = useTheme();
+  const { signOut, user } = useAuth();
 
   function formatDate(date: string | number) {
     if (!date) return;
@@ -166,15 +169,17 @@ export default function Dashboard() {
               <UserInfo>
                 <Photo
                   source={{
-                    uri: "https://avatars.githubusercontent.com/u/49461500?v=4",
+                    uri: user.photo,
                   }}
                 />
                 <User>
-                  <UserGreeting>Olá, </UserGreeting>
-                  <UserName>Pedro</UserName>
+                  <UserGreeting>Olá,</UserGreeting>
+                  <UserName>{user.name}</UserName>
                 </User>
               </UserInfo>
-              <Icon name="power" />
+              <LogoutButton onPress={signOut}>
+                <Icon name="power" />
+              </LogoutButton>
             </UserWrapper>
           </Header>
           <HighlightCards>

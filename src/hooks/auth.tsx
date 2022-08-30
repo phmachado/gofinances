@@ -26,6 +26,8 @@ type AuthProviderProps = {
 type AuthContextData = {
   user: User;
   signInWithGoogle(): Promise<void>;
+  signOut(): Promise<void>;
+  userStorageLoading: boolean;
 };
 
 type AuthorizationResponse = {
@@ -75,6 +77,11 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  async function signOut() {
+    setUser({} as User);
+    await AsyncStorage.removeItem(userStorageKey);
+  }
+
   useEffect(() => {
     async function loadUserStorageData(): Promise<void> {
       const userStoraged = await AsyncStorage.getItem(userStorageKey);
@@ -91,7 +98,9 @@ function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle }}>
+    <AuthContext.Provider
+      value={{ user, signInWithGoogle, signOut, userStorageLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

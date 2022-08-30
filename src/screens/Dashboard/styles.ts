@@ -63,6 +63,10 @@ export const Icon = styled(Feather)`
   font-size: ${RFValue(24)}px;
 `;
 
+export const LogoutButton = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.7,
+})``;
+
 export const HighlightCards = styled.ScrollView.attrs({
   horizontal: true,
   showsHorizontalScrollIndicator: false,
