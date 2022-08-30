@@ -6,6 +6,7 @@ import { Container, Header, Title, Content } from "./styles";
 import { DataListProps } from "../Dashboard";
 import { categories } from "../../utils/categories";
 import { useFocusEffect } from "@react-navigation/native";
+import { useAuth } from "../../hooks/auth";
 
 type CategoryData = {
   name: string;
@@ -18,8 +19,10 @@ export default function Resume() {
     []
   );
 
+  const { user } = useAuth();
+
   async function loadData() {
-    const dataKey = "@gofinances:transactions";
+    const dataKey = `@gofinances:transactions_user:${user.id}`;
     const response = await AsyncStorage.getItem(dataKey);
     const responseFormatted = response ? JSON.parse(response) : [];
 

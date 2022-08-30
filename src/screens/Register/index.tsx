@@ -24,6 +24,7 @@ import Button from "../../components/Forms/Button";
 import TransactionTypeButton from "../../components/Forms/TransactionTypeButton";
 import CategorySelectButton from "../../components/Forms/CategorySelectButton";
 import CategorySelect from "../CategorySelect";
+import { useAuth } from "../../hooks/auth";
 
 type FormData = {
   [key: string]: string;
@@ -45,7 +46,9 @@ export default function Register() {
     name: "Categoria",
   });
 
-  const dataKey = "@gofinances:transactions";
+  const { user } = useAuth();
+
+  const dataKey = `@gofinances:transactions_user:${user.id}`;
 
   const {
     control,
